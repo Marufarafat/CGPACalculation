@@ -3,6 +3,10 @@
 #include <string.h>
 
 
+void calculateCGPA();
+void method();
+struct Students studentInfo();
+float findGP(int point);
 
 struct Subjects {
    char name[100];
@@ -16,9 +20,6 @@ struct Students{
     int numOfSubject;
 };
 
-void calculateCGPA();
-void method();
-struct Students studentInfo();
 
 int main(){
 
@@ -73,6 +74,33 @@ struct Students studentInfo(){
 
 }
 
+float findGP(int point){
+
+    if(point < 40 ){
+        return 0;
+    } else if(point < 45){
+        return 2;
+    } else if(point < 50){
+        return 2.25;
+    } else if(point < 55){
+        return 2.5;
+    } else if(point < 60){
+        return 2.75;
+    } else if(point < 65){
+        return 3;
+    } else if(point < 70){
+        return 3.25;
+    } else if(point < 75){
+        return 3.5;
+    } else if(point < 80){
+        return 3.75;
+    } else if(point <= 100){
+        return 4;
+    } else{
+        return 0;
+    }
+}
+
 void calculateCGPA(){
 
     system("cls");
@@ -83,6 +111,11 @@ void calculateCGPA(){
 
     /* taking subjects information from console */
     struct Subjects subjectInfo[student.numOfSubject];
+
+    float allSubjectSum = 0;
+    float allSubjectCredit = 0;
+
+    float totalCGPA = 0;
 
     int i;
     for(i = 0;i < student.numOfSubject;i++){
@@ -97,9 +130,6 @@ void calculateCGPA(){
         printf("\n\n");
     }
 
-    float allSubjectPoint = 0;
-    float allSubjectCredit = 0;
-
     /* showing information to console */
     system("cls");
     printf("Student Name: %s\n", student.name);
@@ -110,16 +140,18 @@ void calculateCGPA(){
 
     int j;
     for(j = 0;j < student.numOfSubject;j++){
-        allSubjectPoint += subjectInfo[j].point;
+        allSubjectSum += subjectInfo[j].credit * findGP(subjectInfo[j].point);
         allSubjectCredit += subjectInfo[j].credit;
 
         printf("%s \t %.2f \t\t %.2f\n", subjectInfo[j].name, subjectInfo[j].point, subjectInfo[j].credit);
         printf("---------------------------------------\n");
     }
 
-    printf("Total \t\t %.2f \t %.2f", allSubjectPoint, allSubjectCredit);
+    totalCGPA = allSubjectSum/allSubjectCredit;
 
-    printf("\n\nCGPA: %.2f \n", allSubjectPoint/allSubjectCredit);
+    //printf("Total \t\t %.2f \t %.2f", allSubjectSum, allSubjectCredit);
+
+    printf("\n\nCGPA: %.2f \n", totalCGPA);
 
     /* creating file and writing data to file */
     // creating file name
@@ -141,8 +173,8 @@ void calculateCGPA(){
         fprintf(fp, "%s \t %.2f \t\t %.2f\n", subjectInfo[k].name, subjectInfo[k].point, subjectInfo[k].credit);
         fprintf(fp, "---------------------------------------\n");
     }
-    fprintf(fp, "Total \t\t %.2f \t %.2f", allSubjectPoint, allSubjectCredit);
-    fprintf(fp, "\n\nCGPA: %.2f \n", allSubjectPoint/allSubjectCredit);
+    //fprintf(fp, "Total \t\t %.2f \t %.2f", allSubjectSum, allSubjectCredit);
+    fprintf(fp, "\n\nCGPA: %.2f \n", totalCGPA);
 
     fclose(fp); // closing file
 
